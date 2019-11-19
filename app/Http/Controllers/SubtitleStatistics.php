@@ -16,12 +16,12 @@ class SubtitleStatistics extends Controller
 
             for ($i = 0; $i <= $subtitle->getCuesCount() - 1; $i++) {
                 array_push($subtitleStatistics, [
-                    'line' => $i + 1,
-                    'text_line_1' => $subtitle->getCue($i)->getTextLine(0),
-                    'text_line_2' => $subtitle->getCue($i)->getTextLine(1),
-                    'total_chars_line_1' => strlen($subtitle->getCue($i)->getTextLine(0)),
-                    'total_chars_line_2' => strlen($subtitle->getCue($i)->getTextLine(1)),
-                    'total_chars_len' => strlen($subtitle->getCue($i)->getTextLine(0)) + strlen($subtitle->getCue($i)->getTextLine(1)),
+                    'cue' => $i + 1,
+                    'textFirstLine' => $subtitle->getCue($i)->getTextLine(0),
+                    'textSecondeLine' => $subtitle->getCue($i)->getTextLine(1),
+                    'totalCharsFirstLine' => strlen($subtitle->getCue($i)->getTextLine(0)),
+                    'totalCharsSecondeLine' => strlen($subtitle->getCue($i)->getTextLine(1)),
+                    'totalCueChars' => strlen($subtitle->getCue($i)->getTextLine(0)) + strlen($subtitle->getCue($i)->getTextLine(1)),
                     'start' => $subtitle->getCue($i)->getStart(),
                     'stop' => $subtitle->getCue($i)->getStop(),
                     'duration' => $subtitle->getCue($i)->getDuration(),
@@ -30,9 +30,9 @@ class SubtitleStatistics extends Controller
             }
 
             return response()->json([
-                'lines_statistics' => $subtitleStatistics,
-                'subtitle_informations' => [
-                    'total_lines' => $subtitle->getCuesCount()
+                'cuesStatistics' => $subtitleStatistics,
+                'subtitleStatistics' => [
+                    'totalCues' => $subtitle->getCuesCount()
                 ]
             ], 200);
         } catch (\Exception $e) {
