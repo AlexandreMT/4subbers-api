@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Project;
 use App\Part;
 use App\API\APIError;
-use App\Utilities\Functions;
+use App\Utilities\Helpers;
 use Captioning\Format\SubripFile;
 
 class SubtitleSplit extends Controller
@@ -19,16 +19,16 @@ class SubtitleSplit extends Controller
         try {
             $projectName = $request->name;
             $subtitle = new SubripFile($request->subtitle);
-            $totalLines = $subtitle->getCuesCount(); //pega o total de linhas da legenda
+            $totalLines = $subtitle->getCuesCount(); // Pega o total de linhas da legenda
             $partsToSplit = $request->parts;
-            $totalLinesPerPart = floor($totalLines / $partsToSplit); //divide a quantidade de linhas por parte
-            $lastPart = $totalLines - ($totalLinesPerPart * ($partsToSplit - 1)); //define a quantidade de linhas da última parte
+            $totalLinesPerPart = floor($totalLines / $partsToSplit); // Divide a quantidade de linhas por parte
+            $lastPart = $totalLines - ($totalLinesPerPart * ($partsToSplit - 1)); // Define a quantidade de linhas da última parte
             $currentLines = 1;
             $sumParts = $totalLinesPerPart - 1;
 
             $project = $this->newProject($projectName);
 
-            for($i = 0; $i < $partsToSplit; $i++) {
+            for ($i = 0; $i < $partsToSplit; $i++) {
                 if ($i == 0) {
                     $newPart = new SubripFile();
                     for ($l = $currentLines - 1; $l <= $sumParts; $l++) {
@@ -40,7 +40,7 @@ class SubtitleSplit extends Controller
                     $sumParts += $totalLinesPerPart;
                     $currentLines += $totalLinesPerPart - 1;
                 } else {
-                    if ($i + 1 == $partsToSplit) { // ultima parte da legenda
+                    if ($i + 1 == $partsToSplit) { // Ultima parte da legenda
                         $newPart = new SubripFile();
 
                         for ($l = $currentLines; $l <= ($lastPart + $currentLines) - 1; $l++) {
@@ -63,7 +63,10 @@ class SubtitleSplit extends Controller
                 }
             }
 
-            return response()->json($this->getParts($project->url), 201);
+            if ($project) {
+                return response()->json($this->getParts($project->url), 201);
+            }
+            return response()->json('Erro ao dividir legenda', 400);
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 return response()->json(ApiError::errorMessage($e->getMessage(), 1010));
@@ -74,7 +77,7 @@ class SubtitleSplit extends Controller
 
     public function newProject($projectName) {
         $project = new Project;
-        $project->url = Functions::generateURL();
+        $project->url = Helpers::generateURL();
         $project->name = $projectName;
         $project->save();
 
@@ -82,7 +85,7 @@ class SubtitleSplit extends Controller
     }
 
     public function newPart(SubripFile $newPart, $projectName, $i, $project) {
-        $codePart = Functions::generateURL();
+        $codePart = Helpers::generateURL();
 
         $newPart->save(env('LOCAL_SAVE_PARTS') . str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']' . $codePart . '.srt');
 
