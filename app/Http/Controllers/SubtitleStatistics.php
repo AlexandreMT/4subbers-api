@@ -17,11 +17,12 @@ class SubtitleStatistics extends Controller
             for ($i = 0; $i <= $subtitle->getCuesCount() - 1; $i++) {
                 array_push($subtitleStatistics, [
                     'cue' => $i + 1,
+                    'cueText' => $subtitle->getCue($i)->getText(),
                     'textFirstLine' => $subtitle->getCue($i)->getTextLine(0),
                     'textSecondeLine' => $subtitle->getCue($i)->getTextLine(1),
                     'totalCharsFirstLine' => strlen($subtitle->getCue($i)->getTextLine(0)),
                     'totalCharsSecondeLine' => strlen($subtitle->getCue($i)->getTextLine(1)),
-                    'totalCueChars' => strlen($subtitle->getCue($i)->getTextLine(0)) + strlen($subtitle->getCue($i)->getTextLine(1)),
+                    'totalCueChars' => $subtitle->getCue($i)->strlen(),
                     'start' => $subtitle->getCue($i)->getStart(),
                     'stop' => $subtitle->getCue($i)->getStop(),
                     'duration' => $subtitle->getCue($i)->getDuration(),
