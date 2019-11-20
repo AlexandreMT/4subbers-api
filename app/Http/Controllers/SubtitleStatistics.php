@@ -12,6 +12,15 @@ class SubtitleStatistics extends Controller
         try {
             $subtitle = new SubripFile($request->subtitle);
 
+            $maxCps = 0;
+            $minCps = 1000;
+
+            $maxCueLength = 0;
+            $minCueLength = 1000;
+
+            $maxSingleLineLength = 0;
+            $minSingleLineLength = 1000;
+
             $subtitleStatistics = array();
 
             for ($i = 0; $i <= $subtitle->getCuesCount() - 1; $i++) {
@@ -28,13 +37,49 @@ class SubtitleStatistics extends Controller
                     'duration' => $subtitle->getCue($i)->getDuration(),
                     'cps' => $subtitle->getCue($i)->getCPS()
                 ]);
+
+                // Check max CPS
+                if ($subtitle->getCue($i)->getCPS() > $maxCps) {
+                    $maxCps = $subtitle->getCue($i)->getCPS();
+                }
+
+                // Check min CPS
+                if ($subtitle->getCue($i)->getCPS() < $minCps) {
+                    $minCps = $subtitle->getCue($i)->getCPS();
+                }
+
+                // Check max simple CPL
+                if (strlen($subtitle->getCue($i)->getTextLine(0)) > $maxSingleLineLength) {
+                    $maxSingleLineLength = strlen($subtitle->getCue($i)->getTextLine(0));
+                }
+
+                // Check min simple CPL
+                if (strlen($subtitle->getCue($i)->getTextLine(0)) < $minSingleLineLength) {
+                    $minSingleLineLength = strlen($subtitle->getCue($i)->getTextLine(0));
+                }
+
+                // Check max cue length
+                if ($subtitle->getCue($i)->strlen() > $maxCueLength) {
+                    $maxCueLength = $subtitle->getCue($i)->strlen();
+                }
+
+                // Check min cue length
+                if ($subtitle->getCue($i)->strlen() < $minCueLength) {
+                    $minCueLength = $subtitle->getCue($i)->strlen();
+                }
             }
 
             return response()->json([
-                'cuesStatistics' => $subtitleStatistics,
                 'subtitleStatistics' => [
-                    'totalCues' => $subtitle->getCuesCount()
-                ]
+                    'totalCues' => $subtitle->getCuesCount(),
+                    'maxCPS' => $maxCps,
+                    'minCPS' => $minCps,
+                    'maxCueLength' => $maxCueLength,
+                    'minCueLength' => $minCueLength,
+                    'maxSingleLineLength' => $maxSingleLineLength,
+                    'minSingleLineLength' => $minSingleLineLength
+                ],
+                'cuesStatistics' => $subtitleStatistics,
             ], 200);
         } catch (\Exception $e) {
             if (config('app.debug')) {
