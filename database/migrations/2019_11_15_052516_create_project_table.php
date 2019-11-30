@@ -12,13 +12,14 @@ class CreateProjectTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('url');
+            $table->string('originalSubtitle');
             $table->timestamps();
         });
 
         Schema::create('part', function (Blueprint $table) {
             $table->unsignedBigInteger('id');
             $table->foreign('id')->references('id')->on('project');
-            $table->string('file_name');
+            $table->string('fileName');
             $table->timestamps();
         });
     }

@@ -26,7 +26,7 @@ class SubtitleSplit extends Controller
             $currentLines = 1;
             $sumParts = $totalLinesPerPart - 1;
 
-            $project = $this->newProject($projectName);
+            $project = $this->newProject($projectName, $subtitle);
 
             for ($i = 0; $i < $partsToSplit; $i++) {
                 if ($i == 0) {
@@ -75,10 +75,20 @@ class SubtitleSplit extends Controller
         }
     }
 
-    public function newProject($projectName) {
+    public function newProject($projectName, SubripFile $originalSubtitle) {
+        $projectUrl = Helpers::generateURL();
+
+        $originalSubtitle->save(
+            env('LOCAL_SAVE_PARTS') .
+            str_replace(' ', '_', $projectName) .
+            '_original_' . $projectUrl . '.srt'
+        );
+
         $project = new Project;
-        $project->url = Helpers::generateURL();
+        $project->url = $projectUrl;
         $project->name = $projectName;
+        $project->originalSubtitle = str_replace(' ', '_', $projectName) .
+            '_original_' . $projectUrl . '.srt';
         $project->save();
 
         return $project;
@@ -87,11 +97,15 @@ class SubtitleSplit extends Controller
     public function newPart(SubripFile $newPart, $projectName, $i, $project) {
         $codePart = Helpers::generateURL();
 
-        $newPart->save(env('LOCAL_SAVE_PARTS') . str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']' . $codePart . '.srt');
+        $newPart->save(env('LOCAL_SAVE_PARTS') .
+            str_replace(' ', '_', $projectName) .
+            '_[Part'. ($i + 1) . ']' . $codePart . '.srt'
+        );
 
         $part = new Part;
         $part->id = $project->id;
-        $part->file_name = str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']' . $codePart . '.srt';
+        $part->fileName =
+            str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']' . $codePart . '.srt';
         $part->save();
     }
 }
