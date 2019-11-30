@@ -46,6 +46,7 @@ class SubtitleSplit extends Controller
                         for ($l = $currentLines; $l <= ($lastPart + $currentLines) - 1; $l++) {
                             $newPart->addCue($subtitle->getCue($l));
                         }
+
                         $newPart->build();
                         $this->newPart($newPart, $projectName, $i, $project);
                     } else {
@@ -54,6 +55,7 @@ class SubtitleSplit extends Controller
                         for ($l = $currentLines; $l <= $sumParts; $l++) {
                             $newPart->addCue($subtitle->getCue($l));
                         }
+
                         $newPart->build();
                         $this->newPart($newPart, $projectName, $i, $project);
 
@@ -97,7 +99,8 @@ class SubtitleSplit extends Controller
     public function newPart(SubripFile $newPart, $projectName, $i, $project) {
         $codePart = Helpers::generateURL();
 
-        $newPart->save(env('LOCAL_SAVE_PARTS') .
+        $newPart->save(
+            env('LOCAL_SAVE_PARTS') .
             str_replace(' ', '_', $projectName) .
             '_[Part'. ($i + 1) . ']' . $codePart . '.srt'
         );
