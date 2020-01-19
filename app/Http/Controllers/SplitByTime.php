@@ -38,12 +38,12 @@ class SplitByTime extends Controller
 
                     if ($cueStartTime >= $partStartTime) {
                         if ($cueStopTime <= $partStopTime) {
-                            array_push($fromTo, $c + 1);
+                            array_push($fromTo, $c);
                         }
                     }
 
                     if ($cueStartTime < $partStopTime && $cueStopTime > $partStopTime) {
-                        array_push($fromTo, $c + 1);
+                        array_push($fromTo, $c);
                     }
                 }
                 $newPart = $subtitle->buildPart($fromTo[0], $fromTo[count($fromTo) - 1]);
@@ -54,7 +54,7 @@ class SplitByTime extends Controller
                     str_replace(' - ', '_', $subtitleParts[$i]),
                     $project
                 );
-
+//                echo $fromTo[0] . PHP_EOL;
                 $fromTo = [];
             }
 
