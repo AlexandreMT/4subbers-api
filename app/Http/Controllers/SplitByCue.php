@@ -72,13 +72,13 @@ class SplitByCue extends Controller
         $newPart->save(
             env('LOCAL_SAVE_PARTS') .
             str_replace(' ', '_', $projectName) .
-            '_[Part'. ($i + 1) . ']' . $codePart . '.srt'
+            '_[Part'. ($i + 1) . ']_' . $codePart . '.srt'
         );
 
         $part = new Part;
         $part->id = $project->id;
         $part->fileName =
-            str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']' . $codePart . '.srt';
+            str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']_' . $codePart . '.srt';
         $part->save();
     }
 }

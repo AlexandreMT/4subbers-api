@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\API\APIError;
+use App\Part;
 use App\Project;
 use App\Utilities\Helpers;
 use Captioning\Format\SubripFile;
@@ -21,7 +22,7 @@ class SplitByTime extends Controller
             $parts = $request->parts;
             $minutes = $request->minutes;
 
-//            $project = $this->newProject($projectName, $subtitle);
+            $project = $this->newProject($projectName, $subtitle);
 
             $subtitleParts = Helpers::calculateSlotsPartsByTime($minutes, $parts);
             $fromTo = array();
@@ -45,9 +46,20 @@ class SplitByTime extends Controller
                         array_push($fromTo, $c + 1);
                     }
                 }
-                print_r($fromTo[0] . ' --> ' . $fromTo[count($fromTo) - 1]);
+                $newPart = $subtitle->buildPart($fromTo[0], $fromTo[count($fromTo) - 1]);
+
+                $this->newPart(
+                    $newPart,
+                    $projectName,
+                    str_replace(' - ', '_', $subtitleParts[$i]),
+                    $project
+                );
+
                 $fromTo = [];
-                echo PHP_EOL . '------------' . PHP_EOL;
+            }
+
+            if ($project) {
+                return response()->json($this->getParts($project->url), 201);
             }
         } catch (\Exception $e) {
             if (config('app.debug')) {
@@ -55,5 +67,40 @@ class SplitByTime extends Controller
             }
             return response()->json('Error on splitting subtitle.', 400);
         }
+    }
+
+    public function newProject($projectName, SubripFile $originalSubtitle) {
+        $projectUrl = Helpers::generateURL();
+
+        $originalSubtitle->save(
+            env('LOCAL_SAVE_PARTS') .
+            str_replace(' ', '_', $projectName) .
+            '_original_' . $projectUrl . '.srt'
+        );
+
+        $project = new Project;
+        $project->url = $projectUrl;
+        $project->name = $projectName;
+        $project->originalSubtitle = str_replace(' ', '_', $projectName) .
+            '_original_' . $projectUrl . '.srt';
+        $project->save();
+
+        return $project;
+    }
+
+    public function newPart(SubripFile $newPart, $projectName, $interval, $project) {
+        $codePart = Helpers::generateURL();
+
+        $newPart->save(
+            env('LOCAL_SAVE_PARTS') .
+            str_replace(' ', '_', $projectName) .
+            '_['. $interval. ']_' . $codePart . '.srt'
+        );
+
+        $part = new Part;
+        $part->id = $project->id;
+        $part->fileName =
+            str_replace(' ', '_', $projectName) . '_['. $interval . ']_' . $codePart . '.srt';
+        $part->save();
     }
 }
