@@ -6,6 +6,8 @@ Route::middleware(['cors'])->group(function () {
     Route::prefix('subtitle-split')->group(function () {
         Route::post('/cue', 'SplitByCue@SplitByCue');
 
+        Route::post('/time', 'SplitByTime@splitByTime');
+
         Route::get('/get-parts/{url}', 'SplitByCue@getParts');
 
         Route::get('/storage/{filename}', function ($filename) {

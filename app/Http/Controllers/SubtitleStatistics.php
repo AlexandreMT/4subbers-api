@@ -83,9 +83,9 @@ class SubtitleStatistics extends Controller
             ], 200);
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json(ApiError::errorMessage($e->getMessage(), 1010));
+                return response()->json(ApiError::errorMessage($e->getMessage(), 400));
             }
-            return response()->json('Erro na leitura da legenda!', 1010);
+            return response()->json('Error on reading subtitle.', 400);
         }
     }
 }
