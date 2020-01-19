@@ -4,9 +4,9 @@ use Illuminate\Http\Request;
 
 Route::middleware(['cors'])->group(function () {
     Route::prefix('subtitle-split')->group(function () {
-        Route::post('/line', 'SubtitleSplit@splitSubtitleByLine');
+        Route::post('/cue', 'SplitByCue@SplitByCue');
 
-        Route::get('/get-parts/{url}', 'SubtitleSplit@getParts');
+        Route::get('/get-parts/{url}', 'SplitByCue@getParts');
 
         Route::get('/storage/{filename}', function ($filename) {
             $path = env('LOCAL_SAVE_PARTS') . $filename;

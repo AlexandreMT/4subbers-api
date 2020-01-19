@@ -10,7 +10,7 @@ class Helpers
         return substr(md5(microtime()),rand(0,26),8);
     }
 
-    public static function calculateSlotsPartsByLines($totalCues, $totalSlots) {
+    public static function calculateSlotsPartsByCues($totalCues, $totalSlots) {
         $parts = array_fill(0, $totalSlots, '0');
 
         while ($totalCues > 0) {

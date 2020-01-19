@@ -9,23 +9,23 @@ use App\API\APIError;
 use App\Utilities\Helpers;
 use Captioning\Format\SubripFile;
 
-class SubtitleSplit extends Controller
+class SplitByCue extends Controller
 {
     public function getParts($url) {
         return Project::with('parts')->where('url', $url)->get();
     }
 
-    public function splitSubtitleByLine(Request $request){
+    public function SplitByCue(Request $request){
         try {
             $projectName = $request->name;
             $subtitle = new SubripFile($request->subtitle);
             $partsToSplit = $request->parts;
 
-            $totalLines = $subtitle->getCuesCount();
+            $totalCues = $subtitle->getCuesCount();
 
             $project = $this->newProject($projectName, $subtitle);
 
-            $subtitleParts = Helpers::calculateSlotsPartsByLines($totalLines, $partsToSplit);
+            $subtitleParts = Helpers::calculateSlotsPartsByCues($totalCues, $partsToSplit);
 
             for ($i = 0; $i < $partsToSplit; $i++) {
                 $from = explode(' - ', $subtitleParts[$i])[0];
