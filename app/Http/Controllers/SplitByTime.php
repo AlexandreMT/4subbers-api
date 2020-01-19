@@ -54,7 +54,7 @@ class SplitByTime extends Controller
                     str_replace(' - ', '_', $subtitleParts[$i]),
                     $project
                 );
-//                echo $fromTo[0] . PHP_EOL;
+
                 $fromTo = [];
             }
 
