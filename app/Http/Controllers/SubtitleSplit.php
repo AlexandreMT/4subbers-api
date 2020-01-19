@@ -15,65 +15,35 @@ class SubtitleSplit extends Controller
         return Project::with('parts')->where('url', $url)->get();
     }
 
-    public function splitSubtitle(Request $request){
+    public function splitSubtitleByLine(Request $request){
         try {
             $projectName = $request->name;
             $subtitle = new SubripFile($request->subtitle);
-            $totalLines = $subtitle->getCuesCount(); // Pega o total de linhas da legenda
             $partsToSplit = $request->parts;
-            $totalLinesPerPart = floor($totalLines / $partsToSplit); // Divide a quantidade de linhas por parte
-            $lastPart = $totalLines - ($totalLinesPerPart * ($partsToSplit - 1)); // Define a quantidade de linhas da última parte
-            $currentLines = 1;
-            $sumParts = $totalLinesPerPart - 1;
+
+            $totalLines = $subtitle->getCuesCount();
 
             $project = $this->newProject($projectName, $subtitle);
 
+            $subtitleParts = Helpers::calculateSlotsPartsByLines($totalLines, $partsToSplit);
+
             for ($i = 0; $i < $partsToSplit; $i++) {
-                if ($i == 0) {
-                    $newPart = new SubripFile();
-                    for ($l = $currentLines - 1; $l <= $sumParts; $l++) {
-                        $newPart->addCue($subtitle->getCue($l));
-                    }
-                    $newPart->build();
-                    $this->newPart($newPart, $projectName, $i, $project);
+                $from = explode(' - ', $subtitleParts[$i])[0];
+                $to = explode(' - ', $subtitleParts[$i])[1];
 
-                    $sumParts += $totalLinesPerPart;
-                    $currentLines += $totalLinesPerPart - 1;
-                } else {
-                    if ($i + 1 == $partsToSplit) { // Ultima parte da legenda
-                        $newPart = new SubripFile();
+                $newPart = $subtitle->buildPart($from, $to);
 
-                        for ($l = $currentLines; $l <= ($lastPart + $currentLines) - 1; $l++) {
-                            $newPart->addCue($subtitle->getCue($l));
-                        }
-
-                        $newPart->build();
-                        $this->newPart($newPart, $projectName, $i, $project);
-                    } else {
-                        $newPart = new SubripFile();
-
-                        for ($l = $currentLines; $l <= $sumParts; $l++) {
-                            $newPart->addCue($subtitle->getCue($l));
-                        }
-
-                        $newPart->build();
-                        $this->newPart($newPart, $projectName, $i, $project);
-
-                        $sumParts += $totalLinesPerPart;
-                        $currentLines += $totalLinesPerPart;
-                    }
-                }
+                $this->newPart($newPart, $projectName, $i, $project);
             }
 
             if ($project) {
                 return response()->json($this->getParts($project->url), 201);
             }
-            return response()->json('Erro ao dividir legenda', 400);
         } catch (\Exception $e) {
             if (config('app.debug')) {
                 return response()->json(ApiError::errorMessage($e->getMessage(), 1010));
             }
-            return response()->json('Erro ao realizar a operação de salvar!', 1010);
+            return response()->json('Error on splitting subtitle.', 1010);
         }
     }
 

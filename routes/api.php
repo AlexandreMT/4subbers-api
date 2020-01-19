@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 
 Route::middleware(['cors'])->group(function () {
     Route::prefix('subtitle-split')->group(function () {
-        Route::post('/split', 'SubtitleSplit@splitSubtitle');
+        Route::post('/line', 'SubtitleSplit@splitSubtitleByLine');
 
         Route::get('/get-parts/{url}', 'SubtitleSplit@getParts');
 
