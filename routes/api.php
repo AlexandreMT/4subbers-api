@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 Route::middleware(['cors'])->group(function () {
     Route::prefix('subtitle-split')->group(function () {
@@ -11,12 +12,11 @@ Route::middleware(['cors'])->group(function () {
         Route::get('/get-parts/{url}', 'SplitByCue@getParts');
 
         Route::get('/storage/{filename}', function ($filename) {
-            $path = env('LOCAL_SAVE_PARTS') . $filename;
-
-            if (!\Illuminate\Support\Facades\File::exists($path)) {
+            if (!Storage::exists('4subbers/' . $filename)) {
                 abort(404);
             }
-            return response()->download(env('LOCAL_SAVE_PARTS') . $filename);
+
+            return Storage::download('4subbers/' . $filename);
         });
     });
 
