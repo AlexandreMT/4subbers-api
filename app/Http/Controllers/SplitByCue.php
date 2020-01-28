@@ -8,6 +8,7 @@ use App\Part;
 use App\API\APIError;
 use App\Utilities\Helpers;
 use Captioning\Format\SubripFile;
+use Illuminate\Support\Facades\Storage;
 
 class SplitByCue extends Controller
 {
@@ -49,18 +50,14 @@ class SplitByCue extends Controller
 
     public function newProject($projectName, SubripFile $originalSubtitle) {
         $projectUrl = Helpers::generateURL();
+        $fileName = str_replace(' ', '_', $projectName) . '_original_' . $projectUrl . '.srt';
 
-        $originalSubtitle->save(
-            env('LOCAL_SAVE_PARTS') .
-            str_replace(' ', '_', $projectName) .
-            '_original_' . $projectUrl . '.srt'
-        );
+        Storage::put($fileName, $originalSubtitle->getFileContent());
 
         $project = new Project;
         $project->url = $projectUrl;
         $project->name = $projectName;
-        $project->originalSubtitle = str_replace(' ', '_', $projectName) .
-            '_original_' . $projectUrl . '.srt';
+        $project->originalSubtitle = $fileName;
         $project->save();
 
         return $project;
@@ -68,17 +65,13 @@ class SplitByCue extends Controller
 
     public function newPart(SubripFile $newPart, $projectName, $i, $project) {
         $codePart = Helpers::generateURL();
+        $fileName = str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']_' . $codePart . '.srt';
 
-        $newPart->save(
-            env('LOCAL_SAVE_PARTS') .
-            str_replace(' ', '_', $projectName) .
-            '_[Part'. ($i + 1) . ']_' . $codePart . '.srt'
-        );
+        Storage::put($fileName, $newPart->getFileContent());
 
         $part = new Part;
         $part->id = $project->id;
-        $part->fileName =
-            str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']_' . $codePart . '.srt';
+        $part->fileName = $fileName;
         $part->save();
     }
 }
