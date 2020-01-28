@@ -52,7 +52,7 @@ class SplitByCue extends Controller
         $projectUrl = Helpers::generateURL();
         $fileName = str_replace(' ', '_', $projectName) . '_original_' . $projectUrl . '.srt';
 
-        Storage::put($fileName, $originalSubtitle->getFileContent());
+        Storage::put('4subbers/' . $fileName, $originalSubtitle->getFileContent());
 
         $project = new Project;
         $project->url = $projectUrl;
@@ -67,7 +67,7 @@ class SplitByCue extends Controller
         $codePart = Helpers::generateURL();
         $fileName = str_replace(' ', '_', $projectName) . '_[Part'. ($i + 1) . ']_' . $codePart . '.srt';
 
-        Storage::put($fileName, $newPart->getFileContent());
+        Storage::put('4subbers/' . $fileName, $newPart->getFileContent());
 
         $part = new Part;
         $part->id = $project->id;

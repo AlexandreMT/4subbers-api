@@ -8,6 +8,7 @@ use App\Project;
 use App\Utilities\Helpers;
 use Captioning\Format\SubripFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SplitByTime extends Controller
 {
@@ -71,18 +72,14 @@ class SplitByTime extends Controller
 
     public function newProject($projectName, SubripFile $originalSubtitle) {
         $projectUrl = Helpers::generateURL();
+        $fileName = str_replace(' ', '_', $projectName) . '_original_' . $projectUrl . '.srt';
 
-        $originalSubtitle->save(
-            env('LOCAL_SAVE_PARTS') .
-            str_replace(' ', '_', $projectName) .
-            '_original_' . $projectUrl . '.srt'
-        );
+        Storage::put('4subbers/' . $fileName, $originalSubtitle->getFileContent());
 
         $project = new Project;
         $project->url = $projectUrl;
         $project->name = $projectName;
-        $project->originalSubtitle = str_replace(' ', '_', $projectName) .
-            '_original_' . $projectUrl . '.srt';
+        $project->originalSubtitle = $fileName;
         $project->save();
 
         return $project;
@@ -90,17 +87,13 @@ class SplitByTime extends Controller
 
     public function newPart(SubripFile $newPart, $projectName, $interval, $project) {
         $codePart = Helpers::generateURL();
+        $fileName = str_replace(' ', '_', $projectName) . '_['. $interval . ']_' . $codePart . '.srt';
 
-        $newPart->save(
-            env('LOCAL_SAVE_PARTS') .
-            str_replace(' ', '_', $projectName) .
-            '_['. $interval. ']_' . $codePart . '.srt'
-        );
+        Storage::put('4subbers/' . $fileName, $newPart->getFileContent());
 
         $part = new Part;
         $part->id = $project->id;
-        $part->fileName =
-            str_replace(' ', '_', $projectName) . '_['. $interval . ']_' . $codePart . '.srt';
+        $part->fileName = $fileName;
         $part->save();
     }
 }
