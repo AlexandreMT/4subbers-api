@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Storage;
 
 
 Route::prefix('subtitle-split')->group(function () {
-  Route::post('/cue', 'SplitByCue@SplitByCue');
+  Route::post('/cue', 'SplitByCue@SplitByCue')->middleware('cors');
 
   Route::post('/time', 'SplitByTime@splitByTime');
 
@@ -23,4 +23,4 @@ Route::prefix('subtitle-split')->group(function () {
 
 Route::prefix('subtitle-statistics')->group(function () {
   Route::post('/statistics', 'SubtitleStatistics@subtitleStatistics');
-})->middleware('cors');
+});
