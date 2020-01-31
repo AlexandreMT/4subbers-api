@@ -18,7 +18,6 @@ class SplitByTime extends Controller
 
     public function splitByTime(Request $request) {
         try {
-            print_r($request->name);
             $projectName = $request->name;
             $subtitle = new SubripFile($request->subtitle);
             $parts = $request->parts;
@@ -65,7 +64,7 @@ class SplitByTime extends Controller
             }
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json(ApiError::errorMessage($e->getMessage(), 400));
+                return response()->json(ApiError::errorMessage($e->getMessage(), $request, 400));
             }
             return response()->json('Error on splitting subtitle.', 400);
         }
