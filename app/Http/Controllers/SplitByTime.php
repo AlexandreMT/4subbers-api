@@ -64,7 +64,7 @@ class SplitByTime extends Controller
             }
         } catch (\Exception $e) {
             if (config('app.debug')) {
-                return response()->json(ApiError::errorMessage($e->getMessage(), $request, 400));
+                return response()->json($request, 400);
             }
             return response()->json('Error on splitting subtitle.', 400);
         }
