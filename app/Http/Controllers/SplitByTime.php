@@ -18,10 +18,10 @@ class SplitByTime extends Controller
 
     public function splitByTime(Request $request) {
         try {
-            $projectName = $request->name;
-            $subtitle = new SubripFile($request->subtitle);
-            $parts = $request->parts;
-            $minutes = $request->minutes;
+            $projectName = $request->get('name');
+            $subtitle = new SubripFile($request->file('subtitle'));
+            $parts = $request->get('parts');
+            $minutes = $request->get('minutes');
             error_log($projectName);
             error_log($parts);
             error_log($minutes);
