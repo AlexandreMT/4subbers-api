@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d51977ba1d0b9d32a32cd460e1ec9fbd",
+    "content-hash": "af1c61c533e7dc3ca6433377fa2d008e",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1348,6 +1348,59 @@
                 "url"
             ],
             "time": "2019-07-01T23:21:34+00:00"
+        },
+        {
+            "name": "illuminatech/multipart-middleware",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/illuminatech/multipart-middleware.git",
+                "reference": "8370200f6350912d0bd0295e5593e1363f0ab676"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/illuminatech/multipart-middleware/zipball/8370200f6350912d0bd0295e5593e1363f0ab676",
+                "reference": "8370200f6350912d0bd0295e5593e1363f0ab676",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^6.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^7.5|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Illuminatech\\MultipartMiddleware\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "'multipart/form-data' parser middleware for Laravel",
+            "keywords": [
+                "file",
+                "laravel",
+                "middleware",
+                "multipart",
+                "parser",
+                "request",
+                "upload"
+            ],
+            "time": "2019-09-06T10:46:48+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",

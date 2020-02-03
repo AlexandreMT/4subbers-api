@@ -13,6 +13,7 @@
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^1.0",
         "google/cloud": "^0.116.0",
+        "illuminatech/multipart-middleware": "^1.1",
         "laravel/framework": "^6.0",
         "laravel/tinker": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0"
