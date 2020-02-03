@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 Route::prefix('subtitle-split')->group(function () {
   Route::post('/cue', 'SplitByCue@SplitByCue');
 
-  Route::put('/time', 'SplitByTime@splitByTime');
+  Route::post('/time', 'SplitByTime@splitByTime');
 
   Route::get('/get-parts/{url}', 'SplitByCue@getParts');
 
