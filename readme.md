@@ -1,14 +1,13 @@
 ## 4Subbers
 
-Esta API fornece alguns recursos online para manipulação de legendas,
-evitando a necessidade de instalar programas desktop.
+This REST API has some useful resources to manipulate subtitles.
+It can be helpful when you are not close on your computer.
 
-O objetivo é facilitar a vida da comunidade de criadores de legendas :).
-
-#### Funcionalidades atuais
-1. Dividir uma legenda em várias partes
-2. Ver informações e estatísticas de uma legenda
+#### Features
+1. Split a subtitle by time
+2. Split a subtitle by cue
+3. Check statistics of a subtitle
 
 <p align="center">
-<a href="https://documenter.getpostman.com/view/1032829/S1TSYeSn?version=latest">DOCUMENTAÇÃO</a>
+<a href="https://documenter.getpostman.com/view/1032829/S1TSYeSn?version=latest">API DOCUMENTATION</a>
 </p>
