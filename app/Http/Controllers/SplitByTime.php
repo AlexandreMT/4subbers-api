@@ -19,7 +19,7 @@ class SplitByTime extends Controller
     public function splitByTime(Request $request) {
         try {
             $projectName = $request->get('name');
-            $subtitle = new SubripFile($request->file('subtitle'));
+            $subtitle = new SubripFile($request->file('subtitle'), 'Windows-1252');
             $parts = $request->get('parts');
             $minutes = $request->get('minutes');
 
