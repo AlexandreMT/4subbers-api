@@ -1,5 +1,7 @@
 ## 4Subbers
 
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+
 This REST API has some useful resources to manipulate subtitles.
 It can be helpful when you are not close on your computer.
 
