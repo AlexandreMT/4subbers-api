@@ -13,3 +13,9 @@ It can be helpful when you are not close on your computer.
 <p align="center">
 <a href="https://documenter.getpostman.com/view/1032829/S1TSYeSn?version=latest">API DOCUMENTATION</a>
 </p>
+
+
+#### TODO-list
+- Change subtitle encoding
+- Change subtitle FPS
+- Change subtitle format
