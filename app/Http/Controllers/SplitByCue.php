@@ -19,8 +19,10 @@ class SplitByCue extends Controller
     public function SplitByCue(Request $request){
         try {
             $projectName = $request->name;
-            $subtitle = new SubripFile($request->subtitle, 'Windows-1252');
+            $subtitle = new SubripFile($request->subtitle);
             $partsToSplit = $request->parts;
+
+            $subtitle->setEncoding($subtitle->getEncoding());
 
             $totalCues = $subtitle->getCuesCount();
 
