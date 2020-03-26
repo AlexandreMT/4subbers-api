@@ -22,8 +22,6 @@ class SplitByCue extends Controller
             $subtitle = new SubripFile($request->subtitle);
             $partsToSplit = $request->parts;
 
-            $subtitle->setEncoding($subtitle->getEncoding());
-
             $totalCues = $subtitle->getCuesCount();
 
             $project = $this->newProject($projectName, $subtitle);

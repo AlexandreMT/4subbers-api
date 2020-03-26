@@ -23,8 +23,6 @@ class SplitByTime extends Controller
             $parts = $request->get('parts');
             $minutes = $request->get('minutes');
 
-            $subtitle->setEncoding($subtitle->getEncoding());
-
             $project = $this->newProject($projectName, $subtitle);
 
             $subtitleParts = Helpers::calculateSlotsPartsByTime($minutes, $parts);
